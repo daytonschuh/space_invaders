@@ -6,12 +6,12 @@ from timer import Timer
 class Ship(Sprite):
 
     def __init__(self, ai_settings, screen):
-        # initialize the ship and set its start position
+        """ Initialize the ship and set its start position. """
         super(Ship, self).__init__()
         self.screen = screen
         self.ai_settings = ai_settings
 
-        # load the ship image and get its rect; load explosion frames
+        """ Load all ship images and get its rect; load explosion frames. """
         self.image = pygame.image.load('images/ship.png')
         self.explode_frames = ['images/shipex_1.png', 'images/shipex_2.png',
                                'images/shipex_3.png', 'images/shipex_4.png',
@@ -35,7 +35,7 @@ class Ship(Sprite):
         self.moving_right = False
         self.moving_left = False
 
-    def initialize(self):
+    def reset(self):
         self.explode = False
         self.image = self.image = pygame.image.load('images/ship.png')
         self.timer.frames = ['images/ship.png']

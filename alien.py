@@ -39,14 +39,14 @@ class Alien(Sprite):
         # draw the alien at its current position
         self.screen.blit(self.image, self.rect)
 
-    def update(self, ship):
+    def update(self):
         # move the alien right or left
-        if self.explode is False and ship.explode is False:
+        if self.explode is False:
             self.x += (self.ai_settings.curr_alien_speed_factor *
                        self.ai_settings.fleet_direction)
             self.rect.x = self.x
-        if ship.explode is False:
-            self.image = pygame.image.load(self.timer.imagerect())
+
+        self.image = pygame.image.load(self.timer.imagerect())
 
     def check_edges(self):
         # return true if alien is at the edge of screen
@@ -55,3 +55,22 @@ class Alien(Sprite):
             return True
         elif self.rect.left <= 0:
             return True
+
+
+class Ufo(Alien):
+    def update(self):
+        # move the ufo right
+        if self.explode is False:
+            self.x += self.ai_settings.curr_alien_speed_factor * 1.5
+            self.rect.x = self.x
+
+        self.image = pygame.image.load(self.timer.imagerect())
+
+    def check_edges(self):
+        # return true if ufo passed the edge of screen
+        screen_rect = self.screen.get_rect()
+        if self.rect.left >= screen_rect.right:
+            return True
+
+    def increase_points(self, settings):
+        self.point_value = int(self.point_value * settings.score_scale)

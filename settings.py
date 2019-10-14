@@ -78,5 +78,5 @@ class Settings:
         self.curr_alien_speed_factor *= self.temp_speedup_scale
 
     def randomize_bullet_rate(self, stats):
-        self.alien_bullet_rate = random.randint(15000, 25001) \
+        self.alien_bullet_rate = random.randint(5000, 10000) \
                                  * self.alien_bullet_rate_increase**stats.level

@@ -3,7 +3,7 @@ from pygame.sprite import Sprite
 
 
 class Bunker(Sprite):
-    # a class to represent a bunker
+    """ A short class for bunker functionality """
 
     def __init__(self, screen, frames, top, left):
         # initialize a bunker and set its start position
@@ -23,7 +23,7 @@ class Bunker(Sprite):
         self.rect.left = left
 
     def update(self):
-        # swap image
+        """ The bunker has been damaged. """
         self.image = pygame.image.load(self.frames[1])
 
     def initialize(self):

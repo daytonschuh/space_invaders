@@ -12,19 +12,18 @@ import game_functions as gf
 
 
 def run_game():
-    # initialize pygame, settings, and create screen object
+    """ Initialize pygame, settings and screen objects. """
     pygame.init()
     ai_settings = Settings()
-    screen = pygame.display.set_mode(
-        (ai_settings.screen_width, ai_settings.screen_height))
+    screen = pygame.display.set_mode((ai_settings.screen_width, ai_settings.screen_height))
     pygame.display.set_caption("Space Invaders")
 
-    # make play and high score button
+    """ Make play, back and high score buttons. """
     play_button = Button(screen, "Play", 800, 400)
     high_score_button = Button(screen, "High Score", 800, 500)
     back_button = Button(screen, "Back", 500, 850)
 
-    # make start screen text
+    """ Make start screen. """
     title1 = Text(screen, "SPACE", screen.get_rect().centerx, 85, 500, 100,
                   (255, 255, 255), 250)
     title2 = Text(screen, "INVADERS", screen.get_rect().centerx, 200, 500,
@@ -33,117 +32,113 @@ def run_game():
                              70, (255, 255, 255), 100)
     high_score_title2 = Text(screen, "SCORE", 830, 30, 250,
                              70, (255, 255, 255), 100)
-    alien_1_score = Text(screen, "= 10 PTS", 480,
-                         320, 220, 50, (255, 255, 255), 70)
-    alien_2_score = Text(screen, "= 20 PTS", 480,
-                         400, 220, 50, (255, 255, 255), 70)
-    alien_3_score = Text(screen, "= 40 PTS", 480,
-                         480, 220, 50, (255, 255, 255), 70)
-    ufo_score = Text(screen, "= ?? PTS", 480,
-                     560, 220, 50, (255, 255, 255), 70)
 
-    """ TODO: Read from another file to get player names """
-    hs1 = Text(screen, "1", 420, 100, 50, 50,
-               (255, 255, 255), 65)
-    hs2 = Text(screen, "2", 420, 155, 50, 50,
-               (255, 255, 255), 65)
-    hs3 = Text(screen, "3", 420, 210, 50, 50,
-               (255, 255, 255), 65)
-    hs4 = Text(screen, "4", 420, 265, 50, 50,
-               (255, 255, 255), 65)
-    hs5 = Text(screen, "5", 420, 320, 50, 50,
-               (255, 255, 255), 65)
-    hs6 = Text(screen, "6", 420, 375, 50, 50,
-               (255, 255, 255), 65)
-    hs7 = Text(screen, "7", 420, 430, 50, 50,
-               (255, 255, 255), 65)
-    hs8 = Text(screen, "8", 420, 485, 50, 50,
-               (255, 255, 255), 65)
-    hs9 = Text(screen, "9", 420, 540, 50, 50,
-               (255, 255, 255), 65)
-    hs10 = Text(screen, "10", 420, 595, 50, 50,
-                (255, 255, 255), 65)
+    """ Create a list for alien scores. """
+    li_as = [Text(screen, "= {} PTS".format(x*10), 480, 320 + (x * 80), 220, 50, (255, 255, 255), 70) for x in range(3)]
 
-    # make start screen images
+    """ Create ufo score. """
+    ufo_score = Text(screen, "= ?? PTS", 480, 560, 220, 50, (255, 255, 255), 70)
 
-    alien_1_img = Image(screen, 'images/a1_c.png',
-                        230, 295)
-    alien_2_img = Image(screen, 'images/a2_c.png',
-                        230, 375)
-    alien_3_img = Image(screen, 'images/a3_c.png',
-                        230, 455)
-    ufo_img = Image(screen, 'images/ufo_4.png',
-                    230, 565)
-    ship_img = Image(screen, 'images/ship.png',
-                     540, 764)
+    """ Create a list for high scores. """
+    li_hs = [Text(screen, "{}".format(x+1), 420, 100 + (x*55), 50, 50, (255, 255, 255), 65) for x in range(9)]
 
-    # Create an instance to store game stats and create a scoreboard
+    """ Create a list for alien images. """
+    li_ai = [Image(screen, 'images/a{}_c.png'.format(x+1), 230, 295 + (x * 80)) for x in range(3)]
+
+    """ Create ufo and ship images. """
+    ufo_img = Image(screen, 'images/ufo_4.png', 230, 565)
+    ship_img = Image(screen, 'images/ship.png', 540, 764)
+
+    """ Create an instance to store game stats and create a scoreboard. """
     high_scores = HighScores()
     stats = GameStats(ai_settings, high_scores)
     sb = Scoreboard(ai_settings, screen, stats)
 
-    # Make a ship, a group of bullets, and a group of aliens, and ufo group
+    """ Make a group of bullets, a group for bunkers, a group of aliens, and a group for ufos. """
     bullets_ship = Group()
     bullets_alien = Group()
-    bunker1 = Group()
-    bunker2 = Group()
-    bunker3 = Group()
+
+    bunker = Group()
+
     aliens = Group()
     alien_type = ['images/a1_a.png', 'images/a1_b.png', 'images/a1_c.png', 'images/a1_d.png', 'images/a1_e.png']
     ufo = Group()
     ufo_imgs = ['images/ufo_1.png', 'images/ufo_2.png', 'images/ufo_3.png', 'images/ufo_4.png', 'images/ufo_5.png']
     points = 10
 
-    # create a fleet of aliens
+    """ Create a fleet of aliens. """
     gf.create_fleet(ai_settings, screen, stats, alien_type, points, aliens,
                     ufo_imgs, ufo)
 
-    gf.create_bunker(screen, 1, bunker1)
-    gf.create_bunker(screen, 2, bunker2)
-    gf.create_bunker(screen, 3, bunker3)
+    """ Create the bunker. """
+    gf.create_bunker(screen, bunker)
 
-    # create ship
+    """ Create the ship. """
     ship = Ship(ai_settings, screen)
 
-    # Load sounds
+    """ Load ship and alien sounds. """
     ship_shoot = pygame.mixer.Sound('sounds/laser.wav')
+    ship_shoot.set_volume(0.05)
     alien_shoot = pygame.mixer.Sound('sounds/alien_shoot.wav')
+    alien_shoot.set_volume(0.05)
     alien_exp = pygame.mixer.Sound('sounds/alien_death.wav')
+    alien_exp.set_volume(0.05)
     ship_exp = pygame.mixer.Sound('sounds/player_death.wav')
+    ship_exp.set_volume(0.05)
     ufo_sound = pygame.mixer.Sound('sounds/ufo.wav')
-    pygame.mixer.music.load('sounds/relaxing.mp3')
-    pygame.mixer.music.play(-1, 0.0)
+    ufo_sound.set_volume(0.01)
     ufo_sound_playing = False
 
-    # Start the main loop for the game.
+    """ Load background music. """
+    pygame.mixer.music.load('sounds/relaxing.mp3')
+    pygame.mixer.music.set_volume(0.08)
+    pygame.mixer.music.play(-1, 0.0)
+
+    """ Set up 'intensity' drums. """
+    original = pygame.mixer.Sound('sounds/original.wav')
+    five_percent_faster = pygame.mixer.Sound('sounds/five_percent_faster.wav')
+    ten_percent_faster = pygame.mixer.Sound('sounds/ten_percent_faster.wav')
+    drum_channel = pygame.mixer.Channel(3)
+    drum_channel.set_volume(0.05)
+
+    """ Start the main loop for the game. """
     while True:
         gf.check_events(ai_settings, screen, stats, sb, play_button,
                         high_score_button, back_button, ship, aliens, alien_type, points,
-                        bullets_ship, bullets_alien, bunker1, bunker2, bunker3,
-                        ufo_imgs, ufo, ship_shoot)
+                        bullets_ship, bullets_alien, bunker, ufo_imgs, ufo, ship_shoot)
 
         if stats.game_active:
             ship.update()
             if ship.timer.finished is True:
                 gf.ship_hit(ai_settings, stats, screen, sb,
                             ship, aliens, alien_type, points, bullets_alien,
-                            bullets_ship, high_scores, bunker1, bunker2, bunker3,
-                            ufo_imgs, ufo, ship_exp)
+                            bullets_ship, high_scores, bunker, ufo_imgs, ufo, ship_exp)
             gf.update_bullets(ai_settings, screen, stats, sb, ship, aliens,
                               alien_type, points, bullets_ship, bullets_alien,
-                              high_scores, bunker1, bunker2, bunker3,
-                              ufo_imgs, ufo, alien_shoot, alien_exp, ship_exp)
+                              high_scores, bunker, ufo_imgs, ufo, alien_shoot, alien_exp, ship_exp)
             gf.update_aliens(ai_settings, stats, screen, sb,  ship, aliens,
                              alien_type, points, bullets_alien, bullets_ship, high_scores,
-                             bunker1, bunker2, bunker3, ufo_imgs, ufo, ship_exp)
+                             bunker, ufo_imgs, ufo, ship_exp)
+
+            """" Change music to indicate less enemies. """
+            if not drum_channel.get_busy():
+                if len(aliens) < 30:
+                    drum_channel.play(original, 1)
+                elif len(aliens) < 20:
+                    drum_channel.stop()
+                    drum_channel.set_volume(0.07)
+                    drum_channel.play(five_percent_faster, 1)
+                elif len(aliens) < 11:
+                    drum_channel.stop()
+                    drum_channel.set_volume(0.1)
+                    drum_channel.play(ten_percent_faster, 1)
+                elif len(aliens) == 0:
+                    drum_channel.fadeout(5)
 
         gf.update_screen(ai_settings, screen, stats, sb, ship, aliens,
                          bullets_ship, bullets_alien, play_button, high_score_button, back_button, title1,
-                         title2, alien_1_score, alien_2_score, alien_3_score, ufo_score,
-                         alien_1_img, alien_2_img, alien_3_img, ship_img, ufo_img,
-                         high_score_title1, high_score_title2, hs1, hs2, hs3,
-                         hs4, hs5, hs6, hs7, hs8, hs9, hs10, high_scores, bunker1,
-                         bunker2, bunker3, ufo, ufo_sound, ufo_sound_playing)
+                         title2, li_as, ufo_score, li_ai, ship_img, ufo_img, high_score_title1, high_score_title2,
+                         li_hs, high_scores, bunker, ufo, ufo_sound, ufo_sound_playing)
 
 
 run_game()

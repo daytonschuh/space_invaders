@@ -25,16 +25,15 @@ class Bullet(Sprite):
         self.color = ai_settings.bullet_color
         self.speed_factor = ai_settings.bullet_speed_factor
 
-    def update(self, ship):
+    def update(self):
         # move the bullet up the screen
         # update the decimal position of the bullet
-        if ship.explode is False:
-            if self.source_name == "ship":
-                self.y -= self.speed_factor
-            elif self.source_name == "alien":
-                self.y += (self.speed_factor / 4)
+        if self.source_name == "ship":
+            self.y -= self.speed_factor
+        elif self.source_name == "alien":
+            self.y += (self.speed_factor / 2)
             # update the rect position
-            self.rect.y = self.y
+        self.rect.y = self.y
 
     def draw_bullet(self):
         # draw the bullet to the screen
