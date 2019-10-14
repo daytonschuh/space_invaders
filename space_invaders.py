@@ -64,11 +64,9 @@ def run_game():
     alien_type = ['images/a1_a.png', 'images/a1_b.png', 'images/a1_c.png', 'images/a1_d.png', 'images/a1_e.png']
     ufo = Group()
     ufo_imgs = ['images/ufo_1.png', 'images/ufo_2.png', 'images/ufo_3.png', 'images/ufo_4.png', 'images/ufo_5.png']
-    points = 10
 
     """ Create a fleet of aliens. """
-    gf.create_fleet(ai_settings, screen, stats, alien_type, points, aliens,
-                    ufo_imgs, ufo)
+    gf.create_fleet(ai_settings, screen, stats, alien_type, aliens, ufo_imgs, ufo)
 
     """ Create the bunker. """
     gf.create_bunker(screen, bunker)
@@ -96,28 +94,28 @@ def run_game():
 
     """ Set up 'intensity' drums. """
     original = pygame.mixer.Sound('sounds/original.wav')
-    five_percent_faster = pygame.mixer.Sound('sounds/five_percent_faster.wav')
     ten_percent_faster = pygame.mixer.Sound('sounds/ten_percent_faster.wav')
+    twenty_percent_faster = pygame.mixer.Sound('sounds/twenty_percent_faster.wav')
     drum_channel = pygame.mixer.Channel(3)
     drum_channel.set_volume(0.05)
 
     """ Start the main loop for the game. """
     while True:
         gf.check_events(ai_settings, screen, stats, sb, play_button,
-                        high_score_button, back_button, ship, aliens, alien_type, points,
+                        high_score_button, back_button, ship, aliens, alien_type,
                         bullets_ship, bullets_alien, bunker, ufo_imgs, ufo, ship_shoot)
 
         if stats.game_active:
             ship.update()
             if ship.timer.finished is True:
                 gf.ship_hit(ai_settings, stats, screen, sb,
-                            ship, aliens, alien_type, points, bullets_alien,
+                            ship, aliens, alien_type, bullets_alien,
                             bullets_ship, high_scores, bunker, ufo_imgs, ufo, ship_exp)
             gf.update_bullets(ai_settings, screen, stats, sb, ship, aliens,
-                              alien_type, points, bullets_ship, bullets_alien,
+                              alien_type, bullets_ship, bullets_alien,
                               high_scores, bunker, ufo_imgs, ufo, alien_shoot, alien_exp, ship_exp)
             gf.update_aliens(ai_settings, stats, screen, sb,  ship, aliens,
-                             alien_type, points, bullets_alien, bullets_ship, high_scores,
+                             alien_type, bullets_alien, bullets_ship, high_scores,
                              bunker, ufo_imgs, ufo, ship_exp)
 
             """" Change music to indicate less enemies. """
@@ -127,11 +125,11 @@ def run_game():
                 elif len(aliens) < 20:
                     drum_channel.stop()
                     drum_channel.set_volume(0.07)
-                    drum_channel.play(five_percent_faster, 1)
+                    drum_channel.play(ten_percent_faster, 1)
                 elif len(aliens) < 11:
                     drum_channel.stop()
                     drum_channel.set_volume(0.1)
-                    drum_channel.play(ten_percent_faster, 1)
+                    drum_channel.play(twenty_percent_faster, 1)
                 elif len(aliens) == 0:
                     drum_channel.fadeout(5)
 
